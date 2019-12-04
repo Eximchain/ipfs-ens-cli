@@ -1,8 +1,10 @@
 import { createStore, applyMiddleware, combineReducers } from "redux";
+import { AsyncNodeStorage } from 'redux-persist-node-storage'
+import { PersistConfig, persistReducer, persistStore } from 'redux-persist';
 import thunkMiddleware from "redux-thunk";
-import { composeWithDevTools } from 'redux-devtools-extension';
 import GitReducer, { GitTypes } from './GitDuck';
 import DeployReducer, { DeployTypes } from './DeployDuck';
+import { STATE_PATH } from '../env';
 
 export interface AppState {
   deploy: DeployTypes.DeployState
@@ -14,12 +16,21 @@ const rootReducer = combineReducers({
   git: GitReducer
 });
 
+const persistConfig:PersistConfig<AppState> = {
+  key: 'root',
+  storage: new AsyncNodeStorage(STATE_PATH)
+}
+
+const persistedReducer = persistReducer(persistConfig, rootReducer);
+
 export default function makeStore(initialState?: AppState) {
-  return createStore(
+  const store = createStore(
     rootReducer,
     initialState,
-    composeWithDevTools(applyMiddleware(
+    applyMiddleware(
       thunkMiddleware
-    )),
+    ),
   );
+  const persistor = persistStore(store);
+  return { store, persistor }
 }

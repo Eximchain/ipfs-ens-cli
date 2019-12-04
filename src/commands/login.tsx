@@ -1,8 +1,8 @@
 import React from 'react';
 import { Argv } from "yargs";
 import { render } from 'ink';
-import { ArgShape } from "../cli";
-import { App, LoginFlow } from '../ui';
+import { ArgShape } from "../rootCommand";
+import { CLI, LoginFlow } from '../ui';
 
 export const command = 'login';
 
@@ -14,6 +14,6 @@ export function builder(args:Argv) {
 
 export function handler(args:ArgShape) {
   render(
-    <App args={args} renderFunc={(props) => <LoginFlow {...props} />} />
+    <CLI args={args} renderFunc={(props) => <LoginFlow {...props} />} />
   )
 }

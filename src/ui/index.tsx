@@ -1,4 +1,4 @@
 export * from './helpers';
-export * from './App';
+export * from './CLI';
 export * from './CreateFlow';
 export * from './LoginFlow';

@@ -3,7 +3,7 @@ import React from 'react';
 import BigText from 'ink-big-text';
 import { Argv } from "yargs";
 import { render, Box } from 'ink';
-import { ArgShape } from "../cli";
+import { ArgShape } from "../rootCommand";
 import { Rows, ChevronText, ItemList } from '../ui';
 
 export const command = 'onboarding';
