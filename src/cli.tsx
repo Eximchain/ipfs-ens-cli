@@ -19,7 +19,7 @@ export type ArgShape<Additional = AdditionalArgs> = Arguments<UniversalArgs & Ad
 
 yargs
   .usage('Usage: deployer <command>')
-  .commandDir('rootCmds')
+  .commandDir('commands')
   .options({
     apiUrl: {
       description: "The URL for our IPFS-ENS API",
