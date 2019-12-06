@@ -1,45 +1,37 @@
-import React, { FC, useEffect } from 'react';
+import React, { FC, useState, useEffect } from 'react';
 import APIClient from '@eximchain/ipfs-ens-api-client';
-import { useResource } from 'react-request-hook';
-import open from 'open';
-import { ChevronText, ErrorBox, Rows, Loader, Select } from '../helpers';
-import { isSuccessResponse } from '@eximchain/api-types/spec/responses';
+
+import ConfirmURL from './ConfirmURL';
+import SaveUser from './SaveUser';
+import { ArgPrompt } from '../helpers';
+import { useDispatch } from 'react-redux';
+import { GitActions } from '../../state';
 
 export interface LoginFlowProps {
   API: APIClient
 }
 
 export const LoginFlow:FC<LoginFlowProps> = ({ API }) => {
-  const [loginUrl, getLoginUrl] = useResource(API.deploys.loginUrl.resource);
+  const dispatch = useDispatch();
+  const [retrievedCode, setRetrievedCode] = useState(false);
+  const [code, setCode] = useState('');
 
-  useEffect(function autoFetchLoginUrl(){
-    getLoginUrl();
-  }, []);
+  useEffect(function resetAuthOnStart(){
+    dispatch(GitActions.resetAuth())
+  }, [dispatch]);
 
-  const { data, error, isLoading } = loginUrl;
-
-  if (isLoading || (!data && !error)) {
-    return <Loader message="Getting the deployer's login URL..." />
+  if (!retrievedCode) {
+    return <ConfirmURL {...{ API, setRetrievedCode }} />
   }
-  if (error) {
-    return <ErrorBox operation={`GET /login`} permanent errMsg={JSON.stringify(error, null, 2)} />
-  }
-  if (data && isSuccessResponse(data)) {
-    const url = data.data.loginUrl;
+
+  if (code === '') {
     return (
-      <Rows>
-        <ChevronText>Got it!  We're about to forward you to GitHub, where you can authorize this app to read your repos.</ChevronText>
-        <ChevronText>Then you'll be redirected to our login page, where you'll find your one-time code.</ChevronText>
-        <ChevronText>Copy that code back over here, then we'll fetch and save your OAuth token.</ChevronText>
-        <ChevronText>This token is persistent (only need to log in once), and it will only be saved on your local machine.</ChevronText>
-        <Select 
-          items={[{ value: 'Yes', label: "Let's get started!"}]}
-          onSelect={()=>open(url)}
-          label={'Are you ready to go?'}/>
-      </Rows>
+      <ArgPrompt 
+        label='Please enter the code you copied from our login page.'
+        withResult={setCode}
+        name='One-Time Code' />
     )
   }
-  return (
-    <>Never expect to see this...</>
-  )
+
+  return <SaveUser {...{ API, code }} />
 }
