@@ -1,7 +1,7 @@
 import React from 'react';
 import { Argv } from "yargs";
 import { render } from 'ink';
-import { ArgShape } from "../rootCommand";
+import { ArgShape } from "../deployer";
 import { CLI, CreateFlow } from '../ui';
 
 export const command = 'read <EnsName>';

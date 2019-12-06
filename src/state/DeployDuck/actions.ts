@@ -1,9 +1,7 @@
 import actionCreatorFactory from 'typescript-fsa';
-import { asyncFactory } from 'typescript-fsa-redux-thunk';
 import { DeployItem, DeployArgs } from '@eximchain/ipfs-ens-types/spec/deployment';
 import { AsyncAction, AsyncDispatch } from '../sharedTypes';
-import { getApi } from '../GitDuck/selectors';
-import { AppState } from '../store';
+import { getApi } from '../sharedSelectors';
 import { isSuccessResponse, isErrResponse } from '@eximchain/api-types/spec/responses';
 
 // What's 'typescript-fsa'?
@@ -27,6 +25,8 @@ export const saveDeploys = actionCreator<DeployItem[]>('save-deploys');
 export const deploysLoading = actionCreator<boolean>('deploys-loading');
 
 export const newDeployLoading = actionCreator<boolean>('new-deploy-loading');
+
+export const setApiUrl = actionCreator<string>('set-api-url')
 
 export const setError = actionCreator<any>('set-err');
 

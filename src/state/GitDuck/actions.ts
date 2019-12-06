@@ -2,7 +2,7 @@
 import actionCreatorFactory from 'typescript-fsa';
 import { GitTypes } from '@eximchain/ipfs-ens-types/spec/deployment';
 import { AsyncAction, AsyncDispatch } from '../sharedTypes';
-import { getApi } from './selectors';
+import { getApi } from '../sharedSelectors';
 import { isSuccessResponse } from '@eximchain/api-types/spec/responses';
 
 // actionCreator simplifies making all of these actions
@@ -33,7 +33,7 @@ export const fetchAuth:(code:string) => AsyncAction = (code) => {
     dispatch(setAuthLoading(true));
     try {
       const API = getApi(getState());
-      const authRes = await API.git.login.call({code});
+      const authRes = await API.deploys.login.call({code});
       if (isSuccessResponse(authRes)) {
         dispatch(saveAuth(authRes.data))
       } else {

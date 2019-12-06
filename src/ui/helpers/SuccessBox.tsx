@@ -1,7 +1,7 @@
 import React, { FC } from 'react';
 import { Box, Text, Static, Color } from 'ink';
 import { BoxPads, SuccessLabel } from '.';
-import { isMessageResult } from '@eximchain/dappbot-types/spec/responses';
+import { isMessageResult } from '@eximchain/api-types/spec/responses';
 
 export interface SuccessBoxProps {
   result: any

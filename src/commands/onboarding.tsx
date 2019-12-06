@@ -3,7 +3,7 @@ import React from 'react';
 import BigText from 'ink-big-text';
 import { Argv } from "yargs";
 import { render, Box } from 'ink';
-import { ArgShape } from "../rootCommand";
+import { ArgShape } from "../deployer";
 import { Rows, ChevronText, ItemList } from '../ui';
 
 export const command = 'onboarding';
@@ -16,9 +16,8 @@ export function builder(args:Argv) {
 
 export function handler(args:ArgShape) {
   process.env.NODE_ENV = 'production';
-  render(
-    <Box margin={1}>
-      IPFS-ENS Deployer
+  return render(
+    <Box margin={2}>
       <Rows>
         <BigText text='IPFS-ENS Deployer' 
           lineHeight={2} 

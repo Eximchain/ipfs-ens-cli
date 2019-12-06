@@ -5,7 +5,7 @@ import { shallowMerge } from '../sharedTypes';
 import { DeployState } from './types';
 import { 
   resetNewDeploy, updateNewDeploy, saveDeploys,
-  deploysLoading, newDeployLoading, setError
+  deploysLoading, newDeployLoading, setError, setApiUrl
 } from './actions';
 
 const initialState:DeployState = {
@@ -13,7 +13,8 @@ const initialState:DeployState = {
   error: null,
   deploysLoading: false,
   newDeploy: newDeployArgs(),
-  newDeployLoading: false
+  newDeployLoading: false,
+  apiUrl: 'https://ipfs-api-johno.eximchain-dev.com'
 }
 
 export const DeployReducer = reducerWithInitialState(initialState)
@@ -27,5 +28,6 @@ export const DeployReducer = reducerWithInitialState(initialState)
   .case(deploysLoading, (state, deploysLoading) => shallowMerge(state, { deploysLoading }))
   .case(newDeployLoading, (state, newDeployLoading) => shallowMerge(state, { newDeployLoading }))
   .case(setError, (state, error) => shallowMerge(state, { error }))
+  .case(setApiUrl, (state, apiUrl) => shallowMerge(state, { apiUrl }))
 
 export default DeployReducer;

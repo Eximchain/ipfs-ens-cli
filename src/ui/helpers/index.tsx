@@ -1,6 +1,6 @@
-import { HttpMethods } from '@eximchain/dappbot-types/spec/responses';
+import { HttpMethods } from '@eximchain/api-types/spec/responses';
 import { RequestError } from 'react-request-hook';
-import { Chain } from '@eximchain/dappbot-types/spec/dapp';
+import Chain from '@eximchain/api-types/spec/chains';
 
 export const LIGHT_BLUE = '#78B4F2';
 export const EXIM_BLUE = '';
@@ -38,7 +38,6 @@ export function ChainOption(chainId:number, chain?:Chain.Details) {
 export * from './BoxPads';
 export * from './ChevronText';
 export * from './ArgPrompt';
-export * from '../PrettyRequest';
 export * from './TextBox';
 export * from './Loader';
 export * from './ErrorLabel';

@@ -12,12 +12,6 @@ export const getBranches = createSelector(getGitState, git => git.branches);
 export const haveAuth = createSelector(getAuth, auth => auth !== null);
 export const getToken = createSelector(getAuth, auth => auth ? auth.token : null);
 
-
-export const getApi = createSelector(getToken, token => new APIClient({
-  oauthToken: token ? token : undefined,
-  apiUrl: process.env.REACT_APP_IPFS_ENS_API_URL as string
-}))
-
 export const isLoading = createSelector(getGitState, git => {
   return {
     auth: git.authLoading,

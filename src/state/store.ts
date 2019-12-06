@@ -25,7 +25,7 @@ const persistedReducer = persistReducer(persistConfig, rootReducer);
 
 export default function makeStore(initialState?: AppState) {
   const store = createStore(
-    rootReducer,
+    persistedReducer,
     initialState,
     applyMiddleware(
       thunkMiddleware

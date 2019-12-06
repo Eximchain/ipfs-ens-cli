@@ -1,10 +1,10 @@
 import React, { FC } from 'react';
-import { Color, Text, Box } from 'ink';
+import { Color, Text, Box, TextProps } from 'ink';
 import SelectInput, { InkSelectInputProps, ItemProps, IndicatorProps } from 'ink-select-input';
 import figures from 'figures';
 import { LIGHT_BLUE, Rows } from '.';
-import { StringElt } from '../TruffleFlow';
 
+export type StringElt = string | ReturnType<FC<TextProps>>;
 
 const LightBlue:FC = ({ children }) => <Color hex={LIGHT_BLUE}>{ children }</Color>
 

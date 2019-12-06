@@ -1,6 +1,6 @@
 import path from 'path';
 import fs from 'fs';
-import { ArgShape } from '../rootCommand';
+import { ArgShape } from '../deployer';
 
 /**
  * Middlware: Listen for any options whose name ends in "Path", and if found,

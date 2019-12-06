@@ -2,17 +2,17 @@
   "name": "@eximchain/ipfs-ens-cli",
   "version": "1.0.0",
   "description": "Private CLI to interact with our private IPFS-ENS API",
-  "main": "build/rootCommand.js",
-  "types": "src/rootCommand.tsx",
+  "main": "build/deployer.js",
+  "types": "src/deployer.ts",
   "bin": {
-    "ipfs-deployer": "build/rootCommand.js"
+    "deployer": "build/deployer.js"
   },
   "scripts": {
     "build": "tsc",
     "dev": "tsc --watch",
-    "start": "node build/rootCommand.js",
+    "start": "node build/deployer.js",
     "prepare": "npm run build",
-    "postinstall": "node build/rootCommand.js onboarding"
+    "postinstall": "node build/deployer.js onboarding"
   },
   "repository": {
     "type": "git",
@@ -34,19 +34,27 @@
   "homepage": "https://github.com/Eximchain/ipfs-ens-cli#readme",
   "dependencies": {
     "@eximchain/api-types": "^1.0.4",
-    "@eximchain/ipfs-ens-api-client": "^1.0.1",
-    "@eximchain/ipfs-ens-types": "^1.1.1",
+    "@eximchain/ipfs-ens-api-client": "^1.1.1",
+    "@eximchain/ipfs-ens-types": "^1.1.2",
+    "@types/figures": "^3.0.1",
     "@types/ink-spinner": "^2.0.2",
+    "@types/react": "^16.9.15",
     "@types/react-redux": "^7.1.5",
+    "@types/redux-thunk": "^2.1.0",
     "@types/yargs": "^13.0.3",
+    "axios": "^0.19.0",
+    "figures": "^3.1.0",
     "ink": "^2.6.0",
     "ink-big-text": "^1.0.1",
+    "ink-confirm-input": "file:../ink-confirm-input",
     "ink-link": "^1.0.0",
     "ink-select-input": "^3.1.2",
     "ink-spinner": "^3.0.1",
     "ink-text-input": "^3.2.1",
     "lodash.keyby": "^4.6.0",
+    "open": "^7.0.0",
     "react": "^16.12.0",
+    "react-dom": "^16.12.0",
     "react-redux": "^7.1.3",
     "react-request-hook": "^2.1.1",
     "redux": "^4.0.4",
@@ -60,7 +68,7 @@
   },
   "devDependencies": {
     "@types/lodash.keyby": "^4.6.6",
-    "@types/react": "^16.9.14",
-    "typescript": "^3.6.4"
+    "@types/react-dom": "^16.9.4",
+    "typescript": "^3.7.3"
   }
 }

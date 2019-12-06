@@ -22,3 +22,5 @@ export const isLoading = {
 }
 
 export const getErr = createSelector(getDeployState, deploy => deploy.error);
+
+export const getApiUrl = createSelector(getDeployState, deploy => deploy.apiUrl);

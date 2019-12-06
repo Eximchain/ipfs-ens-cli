@@ -8,4 +8,5 @@ export interface DeployState {
   newDeploy : DeployArgs
   newDeployLoading: boolean
   error : null | any
+  apiUrl : string
 }
