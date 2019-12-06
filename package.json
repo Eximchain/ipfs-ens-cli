@@ -46,7 +46,6 @@
     "figures": "^3.1.0",
     "ink": "^2.6.0",
     "ink-big-text": "^1.0.1",
-    "ink-confirm-input": "file:../ink-confirm-input",
     "ink-link": "^1.0.0",
     "ink-select-input": "^3.1.2",
     "ink-spinner": "^3.0.1",
