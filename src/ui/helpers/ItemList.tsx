@@ -3,7 +3,7 @@ import { Box, Text } from 'ink';
 import TextBox from './TextBox';
 
 export interface ItemListProps {
-  items : { [key:string]: string }
+  items : { [key:string]: string | number }
 }
 
 export const ItemList: FC<ItemListProps> = ({ items }) => {
@@ -11,7 +11,7 @@ export const ItemList: FC<ItemListProps> = ({ items }) => {
     <Box margin={1} flexDirection='column'>
       {
         Object.keys(items).map((itemName, i) => (
-          <TextBox key={i}><Text underline>{itemName}</Text>{': '}{items[itemName]}</TextBox>
+          <TextBox key={i}><Text underline>{itemName}</Text>{': '}{items[itemName].toString()}</TextBox>
         ))
       }
     </Box>

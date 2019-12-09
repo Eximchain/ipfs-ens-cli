@@ -23,7 +23,7 @@ export function handler(args:ArgShape<NewVal>) {
     <CLI args={args} renderFunc={({ args }) => {
       const newVal = args.newVal;
       const dispatch = useDispatch();
-      const savedApiUrl = useSelector(DeploySelectors.getApiUrl)
+      const savedApiUrl = useSelector(DeploySelectors.getApiUrl())
 
       useEffect(function updateIfProvided(){
         if (newVal) dispatch(DeployActions.setApiUrl(newVal))
