@@ -7,6 +7,7 @@ import { DeployActions, GitSelectors, GitActions } from '../../state';
 import { AppState } from '../../state/store';
 import { AsyncDispatch } from '../../state/sharedTypes';
 import { Rows, ChevronText, ConfirmAction, Loader, BoxPads } from '../helpers';
+import { FormActions } from '../../state/FormDuck';
 
 interface StateProps {
   repos: GitTypes.Repo[],
@@ -38,16 +39,17 @@ const RepoStage: FC<RepoStageProps & StateProps & DispatchProps> = (props) => {
         value: `${full_name}`
       }
     })
-    const direction = reposLoading ? (
-      <Loader noPad message={`Found ${repos.length} repos in memory, checking for more...`} />
-    ) : (
-        <ChevronText key='please-select-repo'>
-          Please select a repository ({repos.length} found):
-        </ChevronText>
-      )
     return (
       <Rows>
-        {direction}
+        {
+          reposLoading ? (
+            <Loader key='looking-for-repos' noPad message={`Found ${repos.length} repos in memory, checking for more...`} />
+          ) : (
+            <ChevronText key='please-select-repo'>
+              Please select a repository ({repos.length} found):
+            </ChevronText>
+          )
+        }
         <QuickSearchInput
           label='» Name (type to filter)'
           limit={15}
@@ -81,8 +83,8 @@ const mapDispatchToProps = (dispatch: AsyncDispatch) => {
   return {
     fetchRepos: () => dispatch(GitActions.fetchRepos()),
     selectRepo: (owner: string, repo: string) => {
-      dispatch(DeployActions.updateNewDeploy({ field: 'repo', value: repo }));
-      dispatch(DeployActions.updateNewDeploy({ field: 'owner', value: owner }));
+      dispatch(FormActions.updateNewDeploy({ field: 'repo', value: repo }));
+      dispatch(FormActions.updateNewDeploy({ field: 'owner', value: owner }));
       dispatch(GitActions.fetchBranches(owner, repo));
     }
   }

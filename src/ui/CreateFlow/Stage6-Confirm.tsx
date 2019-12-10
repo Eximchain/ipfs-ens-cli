@@ -1,10 +1,11 @@
-import React, { useState, FC, Fragment } from 'react';
+import React, { useState, FC, Fragment, useEffect, useRef } from 'react';
 import { connect } from 'react-redux';
 import { DeployArgs } from '@eximchain/ipfs-ens-types/spec/deployment';
 
-import { DeployActions, DeploySelectors } from '../../state';
+import { DeployActions, DeploySelectors, FormSelectors, FormActions } from '../../state';
 import { AppState } from '../../state/store';
 import { AsyncDispatch } from '../../state/sharedTypes';
+import { SuccessBox } from '../helpers';
 
 interface StateProps {
   newDeploy: DeployArgs
@@ -17,27 +18,22 @@ interface DispatchProps {
 }
 
 export interface ConfirmStageProps {
-
+  restart: () => void
 }
 
 const ConfirmStage: FC<ConfirmStageProps & StateProps & DispatchProps> = (props) => {
-  const { newDeploy, startDeploy, loading, error } = props;
+  const { newDeploy, startDeploy, loading, error, restart } = props;
 
-  function confirm() {
-    startDeploy(newDeploy);
-  }
   return (
-    <>
-      
-    </>
+    <SuccessBox permanent operation='Ready to make the following deployment:' result={newDeploy} />
   )
 }
 
 const mapStateToProps = (state: AppState) => {
   return {
-    newDeploy : DeploySelectors.getNewDeploy()(state),
-    loading: DeploySelectors.isLoading().newDeploy(state),
-    error: DeploySelectors.getErr()(state)
+    newDeploy : FormSelectors.getNewDeploy()(state),
+    loading: FormSelectors.isLoading()(state),
+    error: FormSelectors.getErr()(state)
   }
 }
 
@@ -45,7 +41,7 @@ const mapDispatchToProps = (dispatch: AsyncDispatch) => {
   return {
     startDeploy: (args:DeployArgs) => {
       console.log('Trigger to createDeployment actions w/ following args: ',args);
-      dispatch(DeployActions.createDeploy(args));
+      dispatch(FormActions.createDeploy(args));
     }
   }
 }

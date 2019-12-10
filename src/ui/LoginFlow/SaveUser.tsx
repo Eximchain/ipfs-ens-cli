@@ -21,7 +21,6 @@ export const SaveUser:FC<SaveUserProps> = (props) => {
   const error = useSelector(GitSelectors.getErr());
 
   useEffect(function fetchTokenOnMount(){
-    console.log(`Firing a fetchAuth action w/ code ${code}...`)
     dispatch(GitActions.fetchAuth(code))
   }, [dispatch])
 

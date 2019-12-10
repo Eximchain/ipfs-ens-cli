@@ -4,7 +4,7 @@ import { Text } from 'ink';
 import { connect, useSelector } from 'react-redux';
 import { GitTypes } from '@eximchain/ipfs-ens-types/spec/deployment';
 
-import { DeployActions, GitSelectors, GitActions, DeploySelectors } from '../../state';
+import { FormSelectors, FormActions, GitSelectors, GitActions } from '../../state';
 import { AppState } from '../../state/store';
 import { AsyncDispatch } from '../../state/sharedTypes';
 import { Loader, Rows, Select, ConfirmAction } from '../helpers';
@@ -35,32 +35,21 @@ const BranchStage: FC<BranchStageProps & StateProps & DispatchProps> = (props) =
     <Loader message={'Loading branches, please wait...'} />
   )
 
-  if (selectedBranch === '') {
-    return (
-      <Rows>
-        <QuickSearch label={'» Name (type to filter)'}
-          limit={15}
-          items={branches.map((branch) => {
-            const name = branch.name;
-            return { label: name, value: name }
-          })}
-          onSelect={({ value }) => setSelectedBranch(value as string)} />
-      </Rows>
-    )
-  }
-
   return (
     <Rows>
-      <ConfirmAction
-        action={`Are you sure you want to use the ${selectedBranch} branch from @${owner}/${repo}?`}
-        confirm={() => selectBranch(selectedBranch)}
-        deny={() => setSelectedBranch('')} />
+      <QuickSearch label={'» Name (type to filter)'}
+        limit={15}
+        items={branches.map((branch) => {
+          const name = branch.name;
+          return { label: name, value: name }
+        })}
+        onSelect={({ value }) => selectBranch(value as string)} />
     </Rows>
   )
 }
 
 const mapStateToProps = (state: AppState) => {
-  const { repo, owner } = DeploySelectors.getNewDeploy()(state);
+  const { repo, owner } = FormSelectors.getNewDeploy()(state);
   return {
     branches: GitSelectors.getBranches()(state)[`${owner}/${repo}`],
     branchesLoading: GitSelectors.isLoading()(state).branches,
@@ -72,7 +61,7 @@ const mapDispatchToProps = (dispatch: AsyncDispatch) => {
   return {
     fetchBranches: (owner: string, repo: string) => dispatch(GitActions.fetchBranches(owner, repo)),
     selectBranch: (name: string) => {
-      dispatch(DeployActions.updateNewDeploy({ field: 'branch', value: name }));
+      dispatch(FormActions.updateNewDeploy({ field: 'branch', value: name }));
     }
   }
 }

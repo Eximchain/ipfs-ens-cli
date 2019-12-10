@@ -4,7 +4,7 @@ import { Argv } from "yargs";
 import { render } from 'ink';
 import { ArgShape } from "../deployer";
 import { CLI, Rows, ChevronText } from '../ui';
-import { DeployActions, DeploySelectors } from '../state/DeployDuck';
+import { DeployActions, DeploySelectors } from '../state/DeploysDuck';
 
 export const command = 'api [newVal]';
 

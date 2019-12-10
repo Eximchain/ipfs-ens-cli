@@ -3,7 +3,8 @@ import makeStore from './store';
 export default makeStore;
 
 export * from './store';
-export * from './DeployDuck';
+export * from './DeploysDuck';
+export * from './FormDuck';
 export * from './GitDuck';
 
 import * as Selectors from './sharedSelectors';

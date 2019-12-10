@@ -41,7 +41,6 @@ export const fetchAuth:(code:string) => AsyncAction = (code) => {
         dispatch(setError(authRes.err))
       }
     } catch (err) {
-      console.log('fetchAuth err: ',err);
       dispatch(resetAuth())
       dispatch(setError(err))
     }
@@ -58,7 +57,6 @@ export const fetchUser:() => AsyncAction = () => {
       const user = await API.git.getUser();
       dispatch(saveUser(user));
     } catch (err) {
-      console.log('fetchUser err: ',err);
       dispatch(resetAuth())
       dispatch(setError(err));
     }
@@ -75,7 +73,6 @@ export const fetchRepos:() => AsyncAction = () => {
       const repos = await API.git.getRepos();
       dispatch(saveRepos(repos));
     } catch (err) {
-      console.log('fetchRepos err: ',err);
       dispatch(setError(err))
     }
     dispatch(setReposLoading(false));
@@ -93,7 +90,6 @@ export const fetchBranches:(owner:string, repo:string) => AsyncAction = (owner, 
         repo: `${owner}/${repo}`, branches
       }));
     } catch (err) {
-      console.log('fetchBranches err: ',fetchBranches);
       dispatch(setError(err))
     }
     dispatch(setBranchesLoading(false));

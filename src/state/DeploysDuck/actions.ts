@@ -13,18 +13,9 @@ import { isSuccessResponse, isErrResponse } from '@eximchain/api-types/spec/resp
 // and an action, only returns true if the action was of that type.
 const actionCreator = actionCreatorFactory('deploy');
 
-export const resetNewDeploy = actionCreator<void>('reset-new');
-
-export const updateNewDeploy = actionCreator<{
-  field: keyof DeployArgs,
-  value: string
-}>('update-new');
-
 export const saveDeploys = actionCreator<DeployItem[]>('save-deploys');
 
 export const deploysLoading = actionCreator<boolean>('deploys-loading');
-
-export const newDeployLoading = actionCreator<boolean>('new-deploy-loading');
 
 export const setApiUrl = actionCreator<string>('set-api-url')
 
@@ -65,29 +56,3 @@ export const fetchDeploy: (name: string) => AsyncAction = (name) => {
     dispatch(deploysLoading(false));
   }
 }
-
-export const createDeploy: (args: DeployArgs) => AsyncAction = (args) => {
-  return async (dispatch: AsyncDispatch, getState) => {
-    dispatch(newDeployLoading(true));
-    try {
-      const API = getApi(getState());
-      const createRes = await API.deploys.create.call(args.ensName, args);
-      console.log('We got a create response', createRes);
-      console.log('Throwing away newDeploy: ',args);
-      dispatch(resetNewDeploy());
-    } catch (err) {
-      dispatch(setError(err));
-    }
-    dispatch(newDeployLoading(false));
-
-    // Wait for 3/4s of a second then refresh our deploy list
-    await sleep(750);
-    dispatch(fetchDeploys())
-  }
-}
-
-function sleep(ms: number) {
-  return new Promise((res) => {
-    setTimeout(() => res(null), ms);
-  })
-} 

@@ -2,9 +2,10 @@ import React, { useState, FC } from 'react';
 import { connect } from 'react-redux';
 import { GitTypes, DeployArgs } from '@eximchain/ipfs-ens-types/spec/deployment';
 
-import { DeployActions, DeploySelectors } from '../../state';
+import { DeployActions, DeploySelectors, FormActions } from '../../state';
 import { AppState } from '../../state/store';
 import { AsyncDispatch } from '../../state/sharedTypes';
+import { ArgPrompt, ConfirmAction } from '../helpers';
 
 interface StateProps {
   
@@ -15,26 +16,28 @@ interface DispatchProps {
 }
 
 export interface BuildStageProps {
-
+  buildScript: string
 }
 
 const BuildStage: FC<BuildStageProps & StateProps & DispatchProps> = (props) => {
-  const { updateNewDeploy } = props;
+  const { updateNewDeploy, buildScript } = props;
+  const [needToSpecify, setNeedToSpecify] = useState(false);
 
-  const [ensState, setEnsState] = useState('');
-  const [buildDir, setBuildDir] = useState('./build');
-
-  // TODO: Validate the availability of the desired ENS name
-
-  function proceed(){
-    updateNewDeploy('ensName', ensState);
-    updateNewDeploy('buildDir', buildDir);
+  if (!needToSpecify && buildScript === 'react-scripts build') {
+    return (
+      <ConfirmAction action={"It looks like you're using create-react-app.  Your build will end up in /build, right?"} 
+        confirm={() => updateNewDeploy('buildDir', '/build')}
+        deny={()=>setNeedToSpecify(true)}
+        />
+    )
   }
 
   return (
-    <>
-      
-    </>
+    <ArgPrompt name='build-directory' 
+      label={"What directory will your build end up in?  Start with a slash, this is relative to your repository root."}
+      withResult={(newName) => {
+        updateNewDeploy('buildDir', newName);
+      }} />
   )
 }
 
@@ -46,7 +49,7 @@ const mapStateToProps = (state: AppState) => {
 
 const mapDispatchToProps = (dispatch: AsyncDispatch) => {
   return {
-    updateNewDeploy: (field:keyof DeployArgs, value:string) => dispatch(DeployActions.updateNewDeploy({ field, value }))
+    updateNewDeploy: (field:keyof DeployArgs, value:string) => dispatch(FormActions.updateNewDeploy({ field, value }))
   }
 }
 
