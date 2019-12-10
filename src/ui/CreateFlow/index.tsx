@@ -1,5 +1,5 @@
 import React, { FC, useState, useEffect } from 'react';
-import { connect } from 'react-redux';
+import { connect, useDispatch, useSelector } from 'react-redux';
 import APIClient from '@eximchain/ipfs-ens-api-client';
 import { DeployArgs } from '@eximchain/ipfs-ens-types/spec/deployment';
 import { AppState, DeploySelectors, DeployActions } from '../../state';
@@ -17,22 +17,17 @@ export interface CreateFlowProps {
   API: APIClient
 }
 
-interface StateProps extends DeployArgs {}
+export const CreateFlow:FC<CreateFlowProps> = (props) => {
+  const { API } = props;
 
-interface DispatchProps {
-  restart: () => void
-}
-
-const CreateFlowRouter:FC<CreateFlowProps & StateProps & DispatchProps> = (props) => {
-  const { API, ensName, repo, owner, branch, packageDir, buildDir, restart } = props;
+  const newDeploy = useSelector(FormSelectors.getNewDeploy());
+  const { ensName, repo, owner, branch, packageDir, buildDir } = newDeploy;
   const [buildScript, setBuildScript] = useState('');
 
-  useEffect(function clearOnFinish(){
-    // If the user bailed in the middle of the process,
-    // this ensures their prior session doesn't pollute
-    // this one
-    return () => restart();
-  }, [restart])
+  const dispatch = useDispatch();
+  function restart(){
+    dispatch(FormActions.resetNewDeploy())
+  }
 
   if (repo === '' || owner === '') {
     return <RepoStage />;
@@ -43,33 +38,19 @@ const CreateFlowRouter:FC<CreateFlowProps & StateProps & DispatchProps> = (props
   }
 
   if (packageDir === '') {
-    // @ts-ignore
+    
     return <PackageStage {...{ API, repo, owner, branch, setBuildScript }} />
   }
 
   if (buildDir === '') {
-    return <BuildStage {...{ buildScript }} />;
+    return <BuildStage {...{ buildScript, repo, owner, branch }} />;
   }
 
   if (ensName === '') {
     return <NameStage />;
   }
 
-  return <ConfirmStage {...{ restart }} />;
+  return <ConfirmStage {...{ API, restart }} />;
 }
-
-const mapStateToProps = (state:AppState) => {
-  return {
-    ...FormSelectors.getNewDeploy()(state)
-  }
-}
-
-const mapDispatchToProps = (dispatch:AsyncDispatch) => {
-  return {
-    restart: () => dispatch(FormActions.resetNewDeploy())
-  }
-}
-
-export const CreateFlow = connect(mapStateToProps, mapDispatchToProps)(CreateFlowRouter);
 
 export default CreateFlow;

@@ -5,8 +5,6 @@ export interface DeployState {
     [name:string] : DeployItem
   }
   deploysLoading: boolean
-  newDeploy : DeployArgs
-  newDeployLoading: boolean
   error : null | any
   apiUrl : string
 }

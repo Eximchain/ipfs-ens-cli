@@ -42,7 +42,7 @@ export const fetchAuth:(code:string) => AsyncAction = (code) => {
       }
     } catch (err) {
       dispatch(resetAuth())
-      dispatch(setError(err))
+      dispatch(setError(JSON.stringify(err, null, 2)))
     }
     dispatch(setAuthLoading(false));
   }
@@ -58,7 +58,7 @@ export const fetchUser:() => AsyncAction = () => {
       dispatch(saveUser(user));
     } catch (err) {
       dispatch(resetAuth())
-      dispatch(setError(err));
+      dispatch(setError(JSON.stringify(err, null, 2)));
     }
     dispatch(setUserLoading(false));
   }

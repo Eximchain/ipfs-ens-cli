@@ -12,3 +12,6 @@ export import SharedSelectors = Selectors;
 
 import * as Types from './sharedTypes';
 export import SharedTypes = Types;
+
+import * as Actions from './sharedActions';
+export import SharedActions = Actions;

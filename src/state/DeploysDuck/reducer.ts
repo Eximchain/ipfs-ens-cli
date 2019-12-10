@@ -1,6 +1,5 @@
 import { reducerWithInitialState } from "typescript-fsa-reducers";
 import keyBy from 'lodash.keyby';
-import { newDeployArgs } from '@eximchain/ipfs-ens-types/spec/deployment';
 import { shallowMerge } from '../sharedTypes';
 import { DeployState } from './types';
 import { 
@@ -11,8 +10,6 @@ const initialState:DeployState = {
   deploys: {},
   error: null,
   deploysLoading: false,
-  newDeploy: newDeployArgs(),
-  newDeployLoading: false,
   apiUrl: 'https://ipfs-api-johno.eximchain-dev.com'
 }
 

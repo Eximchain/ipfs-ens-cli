@@ -1,11 +1,13 @@
-import React, { useState, FC, Fragment, useEffect, useRef } from 'react';
+import React, { useState, FC } from 'react';
 import { connect } from 'react-redux';
+import APIClient from '@eximchain/ipfs-ens-api-client';
 import { DeployArgs } from '@eximchain/ipfs-ens-types/spec/deployment';
 
-import { DeployActions, DeploySelectors, FormSelectors, FormActions } from '../../state';
+import { FormSelectors, FormActions } from '../../state';
 import { AppState } from '../../state/store';
 import { AsyncDispatch } from '../../state/sharedTypes';
-import { SuccessBox } from '../helpers';
+import { SuccessBox, PrettyRequest } from '../helpers';
+import { useResource } from 'react-request-hook';
 
 interface StateProps {
   newDeploy: DeployArgs
@@ -19,13 +21,15 @@ interface DispatchProps {
 
 export interface ConfirmStageProps {
   restart: () => void
+  API: APIClient
 }
 
 const ConfirmStage: FC<ConfirmStageProps & StateProps & DispatchProps> = (props) => {
-  const { newDeploy, startDeploy, loading, error, restart } = props;
+  const { newDeploy, API } = props;
 
+  const req = () => API.deploys.create.resource(newDeploy.ensName, newDeploy);
   return (
-    <SuccessBox permanent operation='Ready to make the following deployment:' result={newDeploy} />
+    <PrettyRequest operation={`POST /deployments/${newDeploy.ensName}`} resource={req} />
   )
 }
 

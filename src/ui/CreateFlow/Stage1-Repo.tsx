@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { GitTypes } from '@eximchain/ipfs-ens-types/spec/deployment';
 import QuickSearchInput from 'ink-quicksearch-input';
 
-import { DeployActions, GitSelectors, GitActions } from '../../state';
+import { GitSelectors, GitActions } from '../../state';
 import { AppState } from '../../state/store';
 import { AsyncDispatch } from '../../state/sharedTypes';
 import { Rows, ChevronText, ConfirmAction, Loader, BoxPads } from '../helpers';

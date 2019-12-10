@@ -1,21 +1,13 @@
 import React, { useState, FC, useEffect } from 'react';
 import { Text } from 'ink';
-import { connect } from 'react-redux';
+import { connect, useDispatch } from 'react-redux';
 import APIClient from '@eximchain/ipfs-ens-api-client';
 import { GitTypes, DeployArgs } from '@eximchain/ipfs-ens-types/spec/deployment';
 
 import { DeployActions, DeploySelectors, FormActions } from '../../state';
 import { AppState } from '../../state/store';
 import { AsyncDispatch } from '../../state/sharedTypes';
-import { ArgPrompt, Loader, ErrorBox, SuccessBox } from '../helpers';
-
-interface StateProps {
-  
-}
-
-interface DispatchProps {
-  updateNewDeploy: (field:keyof DeployArgs, value:string) => void
-}
+import { ArgPrompt, Loader, ErrorBox, SuccessBox, Select, ChevronText, ErrorLabel } from '../helpers';
 
 export interface PackageStageProps {
   API: APIClient
@@ -25,13 +17,15 @@ export interface PackageStageProps {
   setBuildScript: (script:string) => void
 }
 
-const PackageStage: FC<PackageStageProps & StateProps & DispatchProps> = (props) => {
-  const { updateNewDeploy, API, owner, repo, branch, setBuildScript } = props;
+export const PackageStage: FC<PackageStageProps> = (props) => {
+  const { API, owner, repo, branch, setBuildScript } = props;
 
   const [pkgErr, setPkgErr] = useState('');
   const [pkgLoading, setPkgLoading] = useState(false);
   const [pkgContents, setPkgContents] = useState('');
   const [pkgDir, setPkgDir] = useState('/');
+
+  const dispatch = useDispatch();
 
   useEffect(function fetchFileFromDir() {
     const req = async () => {
@@ -64,12 +58,15 @@ const PackageStage: FC<PackageStageProps & StateProps & DispatchProps> = (props)
       }
 
       // This ought to navigate us out of this stage
-      updateNewDeploy('packageDir', pkgDir);
+      dispatch(FormActions.updateNewDeploy({
+        field: 'packageDir',
+        value: pkgDir
+      }))
     } catch (err) {
       setPkgErr(err.toString());
     }
     
-  }, [pkgContents])
+  }, [pkgContents, pkgDir])
 
   if (pkgLoading) {
     return (
@@ -78,21 +75,38 @@ const PackageStage: FC<PackageStageProps & StateProps & DispatchProps> = (props)
   }
 
   if (pkgErr !== '') {
-    // TODO: Would you like to:
-    // 1. Specify a new directory to look for package.json
-    // 2. Pick a different branch
-    // 3. Pick a different repo
-    //
-    // If new directory, zero out pkgDir
     return (
-      <ErrorBox errMsg={pkgErr} />
+      <Select label={[
+        <Text key='error-val'><ErrorLabel />{' '}{pkgErr}</Text>,
+        <ChevronText key='next-step'>What would you like to do?</ChevronText>
+      ]} items={[
+        { value: 'pickDir', label: 'Specify the directory of a valid package.json' },
+        { value: 'newBranch', label: 'Pick a different branch'},
+        { value: 'newRepo', label: 'Pick a different repository' }
+      ]} onSelect={({ value }) => {
+        switch(value){
+          case 'pickDir':
+            setPkgDir('');
+            setPkgErr('');
+            setPkgContents('');
+            break;
+          case 'newBranch':
+            dispatch(FormActions.updateNewDeploy({
+              field: 'branch',
+              value: ''
+            }))
+            break;
+          case 'newRepo':
+            dispatch(FormActions.updateMultiple([
+              ['branch', ''],
+              ['repo', '']
+            ]))
+            break;
+        }
+      }} />
     )
   }
 
-  if (pkgErr === '' && pkgContents !== '') {
-
-  }
-  
   return (
     <ArgPrompt name='Directory' 
       label='Where can we find your package.json? Please include leading & trailing slash.'
@@ -102,16 +116,4 @@ const PackageStage: FC<PackageStageProps & StateProps & DispatchProps> = (props)
 
 }
 
-const mapStateToProps = (state: AppState) => {
-  return {
-    
-  }
-}
-
-const mapDispatchToProps = (dispatch: AsyncDispatch) => {
-  return {
-    updateNewDeploy: (field:keyof DeployArgs, value:string) => dispatch(FormActions.updateNewDeploy({ field, value }))
-  }
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(PackageStage);
+export default PackageStage;

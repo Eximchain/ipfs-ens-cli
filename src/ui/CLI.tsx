@@ -1,11 +1,11 @@
 import React, { PropsWithChildren, ReactElement, useEffect } from 'react';
-import { Provider as ReduxProvider, useSelector } from 'react-redux';
+import { Provider as ReduxProvider, useSelector, useDispatch } from 'react-redux';
 import { RequestProvider } from 'react-request-hook';
 import { PersistGate as PersistProvider } from 'redux-persist/integration/react';
 import APIClient from '@eximchain/ipfs-ens-api-client';
 import axios from 'axios';
 import { AdditionalArgs, ArgShape } from '../deployer';
-import makeStore, { GitSelectors, SharedSelectors } from '../state';
+import makeStore, { SharedActions, SharedSelectors } from '../state';
 import { Loader } from './helpers';
 
 export type RenderFuncProps<Additional extends AdditionalArgs = AdditionalArgs> = (props: {
@@ -51,7 +51,13 @@ export function CLI<Additional extends AdditionalArgs>(props: CLIProps<Additiona
  */
 function CLIWithoutProviders<Additional extends AdditionalArgs>(props: CLIProps<Additional>): ReactElement {
   const { args, renderFunc } = props;
+  const dispatch = useDispatch();
   const API = useSelector(SharedSelectors.getApi)
+
+  useEffect(function clearAnyPersistedErrors(){
+    dispatch(SharedActions.clearAllErrors())
+  }, []);
+
   return renderFunc({ API, args })
 }
 

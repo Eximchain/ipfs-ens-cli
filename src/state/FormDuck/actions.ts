@@ -14,6 +14,8 @@ export const updateNewDeploy = actionCreator<{
   value: string
 }>('update');
 
+export const updateMultiple = actionCreator<[keyof DeployArgs, string][]>('update-multiple')
+
 export const newDeployLoading = actionCreator<boolean>('loading');
 
 export const setError = actionCreator<any>('error');
