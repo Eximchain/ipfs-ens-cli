@@ -29,8 +29,6 @@ export interface BranchStageProps {
 const BranchStage: FC<BranchStageProps & StateProps & DispatchProps> = (props) => {
   const { branches, branchesLoading, repo, owner, fetchBranches, selectBranch } = props;
 
-  const [selectedBranch, setSelectedBranch] = useState('');
-
   if (!branches || branchesLoading) return (
     <Loader message={'Loading branches, please wait...'} />
   )

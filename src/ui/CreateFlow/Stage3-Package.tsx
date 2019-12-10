@@ -92,10 +92,11 @@ const PackageStage: FC<PackageStageProps & StateProps & DispatchProps> = (props)
   if (pkgErr === '' && pkgContents !== '') {
 
   }
+  
   return (
-    <ArgPrompt name='package.json-filepath' 
-      label='Path to package.json (include leading & trailing slash)'
-      defaultValue='package.json'
+    <ArgPrompt name='Directory' 
+      label='Where can we find your package.json? Please include leading & trailing slash.'
+      defaultValue='/'
       withResult={(pkgVal) => setPkgDir(pkgVal)} />
   )
 
