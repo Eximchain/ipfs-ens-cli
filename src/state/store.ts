@@ -1,3 +1,4 @@
+import path from 'path';
 import { createStore, applyMiddleware, combineReducers } from "redux";
 import { AsyncNodeStorage } from 'redux-persist-node-storage'
 import { PersistConfig, persistReducer, persistStore } from 'redux-persist';
@@ -5,7 +6,6 @@ import thunkMiddleware from "redux-thunk";
 import GitReducer, { GitTypes } from './GitDuck';
 import DeployReducer, { DeployTypes } from './DeploysDuck';
 import FormReducer, { FormTypes } from './FormDuck';
-import { STATE_PATH } from '../env';
 
 export interface AppState {
   deploy: DeployTypes.DeployState
@@ -18,6 +18,10 @@ const rootReducer = combineReducers({
   git: GitReducer,
   form: FormReducer
 });
+
+const INSTALL_PATH = __dirname;
+
+const STATE_PATH = path.resolve(INSTALL_PATH, './redux-state')
 
 const persistConfig:PersistConfig<AppState> = {
   key: 'root',
