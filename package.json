@@ -34,7 +34,7 @@
   "homepage": "https://github.com/Eximchain/ipfs-ens-cli#readme",
   "dependencies": {
     "@eximchain/api-types": "^1.0.4",
-    "@eximchain/ipfs-ens-api-client": "github:eximchain/ipfs-ens-api-client#master",
+    "@eximchain/ipfs-ens-api-client": "^1.1.4",
     "@eximchain/ipfs-ens-types": "^1.1.2",
     "@types/figures": "^3.0.1",
     "@types/ink-spinner": "^2.0.2",
@@ -47,7 +47,7 @@
     "ink": "^2.6.0",
     "ink-big-text": "^1.0.1",
     "ink-link": "^1.0.0",
-    "ink-quicksearch-input": "github:eximchain/ink-quicksearch-input#master",
+    "ink-quicksearch-input": "^1.0.0",
     "ink-select-input": "^3.1.2",
     "ink-spinner": "^3.0.1",
     "ink-table": "^2.0.1",
