@@ -2,13 +2,11 @@
 import yargs, { Arguments } from 'yargs';
 import fs from 'fs';
 import path from 'path';
-import { loadFileFromPath } from './services';
 
 export const npmPackage = JSON.parse(fs.readFileSync(path.resolve(__dirname, './../package.json')).toString());
 
 export interface UniversalArgs {
-  apiUrl: string
-  authUrl: string
+  
 }
 
 export interface AdditionalArgs {
@@ -20,17 +18,6 @@ export type ArgShape<Additional = AdditionalArgs> = Arguments<UniversalArgs & Ad
 yargs
   .usage('Usage: deployer <command>')
   .commandDir('commands')
-  .options({
-    apiUrl: {
-      description: "The URL for our IPFS-ENS API",
-      default: ""
-    },
-    authUrl: {
-      description: "The URL where GitHub's OAuth process will redirect to upon login",
-      default: ''
-    }
-  })
-  .middleware(loadFileFromPath)
   .demandCommand(1)
   .help('help')
   .alias('help', 'h')
