@@ -11,7 +11,7 @@
     "build": "tsc",
     "dev": "tsc --watch",
     "start": "node build/deployer.js",
-    "prepare": "npm run build",
+    "prepare": "rm -rf build; npm run build",
     "postinstall": "node build/deployer.js onboarding"
   },
   "repository": {
