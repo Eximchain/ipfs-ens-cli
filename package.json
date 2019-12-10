@@ -1,6 +1,6 @@
 {
   "name": "@eximchain/ipfs-ens-cli",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Private CLI to interact with our private IPFS-ENS API",
   "main": "build/deployer.js",
   "types": "src/deployer.ts",
