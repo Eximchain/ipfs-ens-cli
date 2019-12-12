@@ -6,7 +6,7 @@ import { CLI, Rows, ChevronText, ItemList } from '../ui';
 import { useSelector } from 'react-redux';
 import { GitSelectors } from '../state';
 
-export const command = 'user';
+export const command = 'whoami';
 
 export const desc = "View the user which is currently logged in.";
 

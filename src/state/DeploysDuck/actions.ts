@@ -45,7 +45,7 @@ export const fetchDeploy: (name: string) => AsyncAction = (name) => {
     try {
       const API = getApi(getState());
       const readRes = await API.deploys.read.call(name);
-      if (isSuccessResponse(readRes) && readRes.data.exists) {
+      if (isSuccessResponse(readRes) && readRes.data.exists && readRes.data.owned) {
         dispatch(saveDeploys([readRes.data.item]));
       } else if (isErrResponse(readRes)) {
         dispatch(setError(readRes.err));

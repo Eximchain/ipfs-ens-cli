@@ -5,12 +5,12 @@ import { PersistConfig, persistReducer, persistStore } from 'redux-persist';
 import thunkMiddleware from "redux-thunk";
 import GitReducer, { GitTypes } from './GitDuck';
 import DeployReducer, { DeployTypes } from './DeploysDuck';
-import FormReducer, { FormTypes } from './FormDuck';
+import FormReducer, { FormState } from './FormDuck';
 
 export interface AppState {
   deploy: DeployTypes.DeployState
   git: GitTypes.GitState
-  form: FormTypes.FormState
+  form: FormState
 }
 
 const rootReducer = combineReducers({

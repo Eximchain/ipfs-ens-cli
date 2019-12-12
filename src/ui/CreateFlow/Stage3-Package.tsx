@@ -58,7 +58,7 @@ export const PackageStage: FC<PackageStageProps> = (props) => {
       }
 
       // This ought to navigate us out of this stage
-      dispatch(FormActions.updateNewDeploy({
+      dispatch(FormActions.update({
         field: 'packageDir',
         value: pkgDir
       }))
@@ -91,7 +91,7 @@ export const PackageStage: FC<PackageStageProps> = (props) => {
             setPkgContents('');
             break;
           case 'newBranch':
-            dispatch(FormActions.updateNewDeploy({
+            dispatch(FormActions.update({
               field: 'branch',
               value: ''
             }))
@@ -99,7 +99,8 @@ export const PackageStage: FC<PackageStageProps> = (props) => {
           case 'newRepo':
             dispatch(FormActions.updateMultiple([
               ['branch', ''],
-              ['repo', '']
+              ['repo', ''],
+              ['owner', '']
             ]))
             break;
         }

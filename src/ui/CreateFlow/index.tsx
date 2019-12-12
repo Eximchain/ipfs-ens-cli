@@ -1,9 +1,6 @@
-import React, { FC, useState, useEffect } from 'react';
-import { connect, useDispatch, useSelector } from 'react-redux';
+import React, { FC, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import APIClient from '@eximchain/ipfs-ens-api-client';
-import { DeployArgs } from '@eximchain/ipfs-ens-types/spec/deployment';
-import { AppState, DeploySelectors, DeployActions } from '../../state';
-import { AsyncDispatch } from '../../state/sharedTypes';
 
 import RepoStage from './Stage1-Repo';
 import BranchStage from './Stage2-Branch';
@@ -20,25 +17,18 @@ export interface CreateFlowProps {
 export const CreateFlow:FC<CreateFlowProps> = (props) => {
   const { API } = props;
 
-  const newDeploy = useSelector(FormSelectors.getNewDeploy());
-  const { ensName, repo, owner, branch, packageDir, buildDir } = newDeploy;
+  const { ensName, repo, owner, branch, packageDir, buildDir } = useSelector(FormSelectors.getArgs());
   const [buildScript, setBuildScript] = useState('');
-
-  const dispatch = useDispatch();
-  function restart(){
-    dispatch(FormActions.resetNewDeploy())
-  }
 
   if (repo === '' || owner === '') {
     return <RepoStage />;
   }
 
   if (branch === '') {
-    return <BranchStage />;
+    return <BranchStage {...{ repo, owner }} />;
   }
 
   if (packageDir === '') {
-    
     return <PackageStage {...{ API, repo, owner, branch, setBuildScript }} />
   }
 
@@ -47,10 +37,10 @@ export const CreateFlow:FC<CreateFlowProps> = (props) => {
   }
 
   if (ensName === '') {
-    return <NameStage />;
+    return <NameStage {...{API}} />;
   }
 
-  return <ConfirmStage {...{ API, restart }} />;
+  return <ConfirmStage {...{ API }} />;
 }
 
 export default CreateFlow;

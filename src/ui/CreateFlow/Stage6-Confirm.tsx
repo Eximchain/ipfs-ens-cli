@@ -1,5 +1,5 @@
 import React, { useState, FC } from 'react';
-import { connect } from 'react-redux';
+import { connect, useSelector } from 'react-redux';
 import APIClient from '@eximchain/ipfs-ens-api-client';
 import { DeployArgs } from '@eximchain/ipfs-ens-types/spec/deployment';
 
@@ -9,45 +9,19 @@ import { AsyncDispatch } from '../../state/sharedTypes';
 import { SuccessBox, PrettyRequest } from '../helpers';
 import { useResource } from 'react-request-hook';
 
-interface StateProps {
-  newDeploy: DeployArgs
-  loading: boolean
-  error: any
-}
-
-interface DispatchProps {
-  startDeploy: (args:DeployArgs) => void
-}
-
 export interface ConfirmStageProps {
-  restart: () => void
   API: APIClient
 }
 
-const ConfirmStage: FC<ConfirmStageProps & StateProps & DispatchProps> = (props) => {
-  const { newDeploy, API } = props;
-
+export const ConfirmStage: FC<ConfirmStageProps> = (props) => {
+  const { API } = props;
+  const newDeploy = useSelector(FormSelectors.getArgs());
+  const loading = useSelector(FormSelectors.isLoading());
+  const error = useSelector(FormSelectors.getErr());
   const req = () => API.deploys.create.resource(newDeploy.ensName, newDeploy);
   return (
     <PrettyRequest operation={`POST /deployments/${newDeploy.ensName}`} resource={req} />
   )
 }
 
-const mapStateToProps = (state: AppState) => {
-  return {
-    newDeploy : FormSelectors.getNewDeploy()(state),
-    loading: FormSelectors.isLoading()(state),
-    error: FormSelectors.getErr()(state)
-  }
-}
-
-const mapDispatchToProps = (dispatch: AsyncDispatch) => {
-  return {
-    startDeploy: (args:DeployArgs) => {
-      console.log('Trigger to createDeployment actions w/ following args: ',args);
-      dispatch(FormActions.createDeploy(args));
-    }
-  }
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(ConfirmStage);
+export default ConfirmStage;

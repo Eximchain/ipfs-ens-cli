@@ -73,7 +73,7 @@ const mapStateToProps = (state: AppState) => {
 
 const mapDispatchToProps = (dispatch: AsyncDispatch) => {
   return {
-    updateNewDeploy: (field: keyof DeployArgs, value: string) => dispatch(FormActions.updateNewDeploy({ field, value }))
+    updateNewDeploy: (field: keyof DeployArgs, value: string) => dispatch(FormActions.update({ field, value }))
   }
 }
 

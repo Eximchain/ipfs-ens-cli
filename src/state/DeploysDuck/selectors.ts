@@ -7,7 +7,8 @@ export const getDeployState = (state:AppState) => state.deploy;
 export const getDeploys = () => createSelector(getDeployState, deploy => deploy.deploys);
 
 export const getDeploy = (deployName:string) => createSelector(getDeploys(), (deploys) => {
-  return deploys[deployName];
+  if (deployName in deploys) return deploys[deployName];
+  return null;
 })
 
 export const isLoading = () => createSelector(getDeployState, deploy => deploy.deploysLoading)
