@@ -124,21 +124,15 @@ const ProgressRow: FC<{
   transitions: DeployItem['transitions']
   state: DeployItem['state']
   createdAt: string
-}> = ({ transitions, state, createdAt }) => {
-  const completedTransitionNames = Object.keys(transitions);
-  const now = moment();
-  const createMoment = moment(createdAt);
+  loading: boolean
+}> = ({ transitions, state, createdAt, loading }) => {
 
-  // let sourceMsg = transitions.source ?
-  //   progressStr('Fetched your source code', createdAt, transitions.source.timestamp) :
-  //   progressStr('fetching your source code', createdAt)
   let sourceMsg = progressStr('Fetching your source code', createdAt)
   let buildMsg = progressStr('Building your source code')
   let ipfsMsg = progressStr('Sending your build to IPFS');
   let registerMsg = progressStr('Registering your subdomain');
   let resolverMsg = progressStr("Setting your subdomain's resolver address");
   let contentMsg = progressStr("Adding your IPFS hash to the resolver");
-
 
   if (transitions.source) {
     // Completed source, set that and build
@@ -149,7 +143,6 @@ const ProgressRow: FC<{
 
   if (transitions.source && transitions.build) {
     // Completed build, set that and IPFS
-    // At least did build
     let sourceTimestamp = transitions.source.timestamp;
     let buildTimestamp = transitions.build.timestamp;
     buildMsg = progressStr('Built your source code', sourceTimestamp, buildTimestamp);
@@ -158,7 +151,6 @@ const ProgressRow: FC<{
 
   if (transitions.build && transitions.ipfs) {
     // Completed IPFS, set that and register
-    // At least did IPFS
     let buildTimestamp = transitions.build.timestamp;
     let ipfsTimestamp = transitions.ipfs.timestamp;
     ipfsMsg = progressStr('Sent your build to IPFS', buildTimestamp, ipfsTimestamp);
@@ -166,7 +158,7 @@ const ProgressRow: FC<{
   }
 
   if (transitions.ipfs && transitions.ensRegister) {
-    // At least did register
+    // Completed register, set that and resolver
     let ipfsTimestamp = transitions.ipfs.timestamp;
     let registerTimestamp = transitions.ensRegister.timestamp;
     registerMsg = progressStr('Registered your subdomain', ipfsTimestamp, registerTimestamp);
@@ -174,7 +166,7 @@ const ProgressRow: FC<{
   }
 
   if (transitions.ensRegister && transitions.ensSetResolver) {
-    // At least did resolver
+    // Completed resolver, set that and content
     let registerTimestamp = transitions.ensRegister.timestamp;
     let resolverTimestamp = transitions.ensSetResolver.timestamp;
     resolverMsg = progressStr("Set your subdomain's resolver address", registerTimestamp, resolverMsg);
@@ -198,7 +190,12 @@ const ProgressRow: FC<{
   ]
   return (
     <Rows noLinePad noSideMargin>
-      <DetailHeader>Deployment Progress</DetailHeader>
+      <Row noSideMargin noLinePad>
+        <DetailHeader>Deployment Progress</DetailHeader>
+        { loading ? (
+          <Loader noPad message='Checking for updates on server...' />
+        ) : null}
+      </Row>
       {
         transitionMessages.map((msg, i) => (
           <Text key={i}>{`${i + 1}. ${msg}`}</Text>
@@ -243,7 +240,7 @@ export const DeployDetails: FC<DeployDetailsProps> = ({ ensName }) => {
   );
 
   itemRows.push(
-    <ProgressRow {...{ state, transitions, createdAt }} key='progress' />,
+    <ProgressRow {...{ state, transitions, createdAt, loading }} key='progress' />,
     <ScriptRow {...{ packageDir, buildDir, owner, repo, branch }} key='build-script' />
   )
   return (

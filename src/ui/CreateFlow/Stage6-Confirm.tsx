@@ -18,7 +18,10 @@ export const ConfirmStage: FC<ConfirmStageProps> = (props) => {
   const newDeploy = useSelector(FormSelectors.getArgs());
   const loading = useSelector(FormSelectors.isLoading());
   const error = useSelector(FormSelectors.getErr());
-  const req = () => API.deploys.create.resource(newDeploy.ensName, newDeploy);
+  const fixedNewDeploy = { ...newDeploy };
+  fixedNewDeploy.packageDir = '.' + newDeploy.packageDir;
+  fixedNewDeploy.buildDir = '.' + newDeploy.buildDir
+  const req = () => API.deploys.create.resource(newDeploy.ensName, fixedNewDeploy);
   return (
     <PrettyRequest operation={`POST /deployments/${newDeploy.ensName}`} resource={req} />
   )
