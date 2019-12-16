@@ -15,15 +15,24 @@ export interface ConfirmStageProps {
 
 export const ConfirmStage: FC<ConfirmStageProps> = (props) => {
   const { API } = props;
-  const newDeploy = useSelector(FormSelectors.getArgs());
+  const args = useSelector(FormSelectors.getArgs());
+
+  // TODO: Make a custom handler for when this form returns,
+  // automatically render the DeployDetails, that sort of thing
   const loading = useSelector(FormSelectors.isLoading());
   const error = useSelector(FormSelectors.getErr());
-  const fixedNewDeploy = { ...newDeploy };
-  fixedNewDeploy.packageDir = '.' + newDeploy.packageDir;
-  fixedNewDeploy.buildDir = '.' + newDeploy.buildDir
-  const req = () => API.deploys.create.resource(newDeploy.ensName, fixedNewDeploy);
+
+  // We gather paths with a plain '/' prefix, as that's the
+  // shape required to query files from the GitHub API.
+  // However, without the dot to make it relative, the
+  // build script treat it as root, breaking everything.
+  const argsWithRelativePaths = { ...args };
+  argsWithRelativePaths.packageDir = '.' + args.packageDir;
+  argsWithRelativePaths.buildDir = '.' + args.buildDir
+  
+  const req = () => API.deploys.create.resource(args.ensName, argsWithRelativePaths);
   return (
-    <PrettyRequest operation={`POST /deployments/${newDeploy.ensName}`} resource={req} />
+    <PrettyRequest operation={`POST /deployments/${args.ensName}`} resource={req} />
   )
 }
 
