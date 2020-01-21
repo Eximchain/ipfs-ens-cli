@@ -7,11 +7,12 @@ export interface ItemListProps {
 }
 
 export const ItemList: FC<ItemListProps> = ({ items }) => {
+  let print = (val:any) => typeof val === 'string' ? val : JSON.stringify(val);
   return (
     <Box margin={1} flexDirection='column'>
       {
         Object.keys(items).map((itemName, i) => (
-          <TextBox key={i}><Text underline>{itemName}</Text>{': '}{JSON.stringify(items[itemName])}</TextBox>
+          <TextBox key={i}><Text underline>{itemName}</Text>{': '}{print(items[itemName])}</TextBox>
         ))
       }
     </Box>
