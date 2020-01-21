@@ -11,7 +11,7 @@ export const ItemList: FC<ItemListProps> = ({ items }) => {
     <Box margin={1} flexDirection='column'>
       {
         Object.keys(items).map((itemName, i) => (
-          <TextBox key={i}><Text underline>{itemName}</Text>{': '}{items[itemName].toString()}</TextBox>
+          <TextBox key={i}><Text underline>{itemName}</Text>{': '}{JSON.stringify(items[itemName])}</TextBox>
         ))
       }
     </Box>

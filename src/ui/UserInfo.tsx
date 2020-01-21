@@ -7,8 +7,8 @@ interface UserInfoProps {
 }
 
 export const UserInfo:FC<UserInfoProps> = ({ user }) => {
-  const { login, name, email, type, public_repos } = user;
+  const { login, name, type, public_repos } = user;
   return (
-    <ItemList items={{ login, name, email, type, public_repos }} />
+    <ItemList items={{ login, name, type, public_repos }} />
   )
 }

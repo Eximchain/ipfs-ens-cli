@@ -1,5 +1,4 @@
-import { DeployItem, DeployArgs, Transitions, DeployStates } from '@eximchain/ipfs-ens-types/spec/deployment';
-import { DeployActions } from '.';
+import { DeployItem, Transitions, DeployStates } from '@eximchain/ipfs-ens-types/spec/deployment';
 
 export interface DeployState {
   deploys : {
