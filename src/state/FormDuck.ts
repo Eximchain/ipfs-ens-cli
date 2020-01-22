@@ -25,13 +25,11 @@ export namespace FormActions {
 
   export const reset = actionCreator<void>('reset');
   
-  // TODO: Use new types
   export const update = actionCreator<{
-    field: keyof DeployArgs,
-    value: string
+    field: DeployArgsKey,
+    value: DeployArgsVal
   }>('update');
   
-  // TODO: Use new types
   export const updateMultiple = actionCreator<DeployArgsPair[]>('update-multiple')
   
   export const setLoading = actionCreator<boolean>('loading');
@@ -75,8 +73,12 @@ export const FormReducer = reducerWithInitialState(initialState)
   .case(FormActions.updateMultiple, (state, updates) => shallowMerge(state, {
     newDeploy: shallowMerge(state.newDeploy, updates.reduce((newVals, update) => {
       const [field, value] = update;
-      if (field === 'sourceProvider') return newVals;
-      newVals[field] = value;
+      if (typeof value !== 'string') {
+        if (field !== 'envVars') throw new Error('Only envVars can be updated with a StringMap');
+        newVals.envVars = value;
+      } else if (field !== 'sourceProvider' && field !== 'envVars') {
+        newVals[field] = value;
+      }
       return newVals;
     }, {} as Partial<DeployArgs>))
   }))
