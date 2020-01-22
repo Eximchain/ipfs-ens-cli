@@ -1,5 +1,5 @@
 import actionCreatorFactory from 'typescript-fsa';
-import { DeployArgs, newDeployArgs } from '@eximchain/ipfs-ens-types/spec/deployment';
+import { DeployArgs, DeployArgsKey, DeployArgsVal, DeployArgsPair, newDeployArgs } from '@eximchain/ipfs-ens-types/spec/deployment';
 import { AsyncAction, AsyncDispatch } from './sharedTypes';
 import { getApi } from './sharedSelectors';
 import { fetchDeploys } from './DeploysDuck/actions';
@@ -26,11 +26,11 @@ export namespace FormActions {
   export const reset = actionCreator<void>('reset');
   
   export const update = actionCreator<{
-    field: keyof DeployArgs,
-    value: string
+    field: DeployArgsKey,
+    value: DeployArgsVal
   }>('update');
   
-  export const updateMultiple = actionCreator<[keyof DeployArgs, string][]>('update-multiple')
+  export const updateMultiple = actionCreator<DeployArgsPair[]>('update-multiple')
   
   export const setLoading = actionCreator<boolean>('loading');
   
@@ -73,8 +73,12 @@ export const FormReducer = reducerWithInitialState(initialState)
   .case(FormActions.updateMultiple, (state, updates) => shallowMerge(state, {
     newDeploy: shallowMerge(state.newDeploy, updates.reduce((newVals, update) => {
       const [field, value] = update;
-      if (field === 'sourceProvider') return newVals;
-      newVals[field] = value;
+      if (typeof value !== 'string') {
+        if (field !== 'envVars') throw new Error('Only envVars can be updated with a StringMap');
+        newVals.envVars = value;
+      } else if (field !== 'sourceProvider' && field !== 'envVars') {
+        newVals[field] = value;
+      }
       return newVals;
     }, {} as Partial<DeployArgs>))
   }))
