@@ -1,5 +1,5 @@
 import actionCreatorFactory from 'typescript-fsa';
-import { DeployArgs, newDeployArgs } from '@eximchain/ipfs-ens-types/spec/deployment';
+import { DeployArgs, DeployArgsKey, DeployArgsVal, DeployArgsPair, newDeployArgs } from '@eximchain/ipfs-ens-types/spec/deployment';
 import { AsyncAction, AsyncDispatch } from './sharedTypes';
 import { getApi } from './sharedSelectors';
 import { fetchDeploys } from './DeploysDuck/actions';
@@ -25,12 +25,14 @@ export namespace FormActions {
 
   export const reset = actionCreator<void>('reset');
   
+  // TODO: Use new types
   export const update = actionCreator<{
     field: keyof DeployArgs,
     value: string
   }>('update');
   
-  export const updateMultiple = actionCreator<[keyof DeployArgs, string][]>('update-multiple')
+  // TODO: Use new types
+  export const updateMultiple = actionCreator<DeployArgsPair[]>('update-multiple')
   
   export const setLoading = actionCreator<boolean>('loading');
   
