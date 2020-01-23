@@ -2,6 +2,15 @@
 
 Deploy your static site from GitHub to IPFS, accessible through a `.eth` subdomain (i.e. `yoursite.hosted.eth`).
 
+## Related Repositories
+
+- [eximchain-notes/ipfs-ens](https://github.com/Eximchain/eximchain-notes/tree/master/ipfs-ens): System diagrams
+- [terraform-ipfs-ens](https://github.com/Eximchain/terraform-ipfs-ens): Terraform to create infrastructure
+- [ipfs-ens-types](https://github.com/Eximchain/ipfs-ens-types): Shared types package
+- [ipfs-ens-api-client](https://github.com/Eximchain/ipfs-ens-api-client): Easy client for calling our IPFS-ENS API
+- [ipfs-ens-lambda](https://github.com/Eximchain/ipfs-ens-lambda): Source for all of the Lambda functions
+- [ipfs-ens-spa](https://github.com/Eximchain/ipfs-ens-spa): create-react-app used for OAuth redirects during login
+
 ## Setup & Usage
 
 Install this private client from `npm` and view the set of commands available:
