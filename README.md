@@ -42,13 +42,15 @@ Made by Eximchain Pte. Ltd.
 If you are going to do active development on this repository, there are a few things you should know:
 
 1. You can clone this library, run `npm i; npm run build`, and then run it by calling `node build/deployer.ts [command]`.  This gets around having to reinstall the library globally after each change.
-2. Two of the dependent libraries have outdated definitions from `DefinitelyTyped`.  After running the first `npm install`, you may get a Typescript compiler error.  Go to `./node_modules/@types/` and find the `ink-table` and `ink-spinner` directories.  Their index files import `Component` from `ink.`  Instead import it from `React` and those errors will go away.
+2. Two of the dependent libraries have outdated definitions from `DefinitelyTyped`.  After running the first `npm install`, you may get a Typescript compiler error.  Go to `./node_modules/@types/` and find the `ink-table` and `ink-spinner` directories.  Their index files import `Component` from `ink.`  Instead import it from `React` and those errors will go away.  You can also copy/paste the index files from the [section below](#replacement-index-files).
 3. If you need to modify the underlying [api-types](https://github.com/Eximchain/api-types), [ipfs-ens-types](https://github.com/Eximchain/ipfs-ens-types), or [ipfs-ens-api-client](https://github.com/Eximchain/ipfs-ens-api-client) packages, and their directories are siblings to this project, then you can install your local version via: `npm install ../ipfs-ens-types`.
 4. You can change the API URL using a hidden command: `deployer api [newApiUrl]`.  If you omit the new URL, it will display the current one.
 5. If you want to get an overall view of how this project is structured, take a look at its [Dev Diary](https://medium.com/eximchain/dev-diary-5-tips-for-building-beautiful-clis-with-node-js-yargs-ink-16d184ea0d14).
 6. This uses Redux for state management & persistence.  If you've never used Redux before, take a look at our [Redux primer](https://github.com/Eximchain/eximchain-notes/blob/master/redux-primer.md) in [`eximchain-notes`](https://github.com/eximchain/eximchain-notes).
 
 ### Replacement index files
+
+Until the `ink-table` and `ink-spinner` packages update their types, we need to manually replace index files to get typescript to compile the project. Below are the index files that allow the project to compile.
 
 #### ./node_modules/@types/ink-table/index.d.ts
 
