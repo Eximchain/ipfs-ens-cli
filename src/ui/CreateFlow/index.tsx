@@ -38,8 +38,7 @@ export const CreateFlow:FC<CreateFlowProps> = (props) => {
   }
 
   if (envVars === undefined) {
-    // TODO: implement env stage
-    return <EnvStage {...{ buildScript, repo, owner, branch }} />;
+    return <EnvStage />;
   }
 
   if (ensName === '') {

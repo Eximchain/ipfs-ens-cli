@@ -43,6 +43,7 @@
     "@types/redux-thunk": "^2.1.0",
     "@types/yargs": "^13.0.3",
     "axios": "^0.19.0",
+    "dotenv": "^8.2.0",
     "figures": "^3.1.0",
     "ink": "^2.6.0",
     "ink-big-text": "^1.0.1",

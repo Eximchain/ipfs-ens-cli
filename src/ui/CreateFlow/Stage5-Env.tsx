@@ -1,7 +1,9 @@
 import React, { useState, FC } from 'react';
 import { connect } from 'react-redux';
-import { Text } from 'ink';
-import { DeployArgs } from '@eximchain/ipfs-ens-types/spec/deployment';
+import { resolve } from "path"
+import { config } from "dotenv"
+
+import { DeployArgsKey, DeployArgsVal } from '@eximchain/ipfs-ens-types/spec/deployment';
 
 import { FormActions } from '../../state';
 import { AppState } from '../../state/store';
@@ -9,46 +11,60 @@ import { AsyncDispatch } from '../../state/sharedTypes';
 import { ArgPrompt, ConfirmAction, Rows, ChevronText, Select } from '../helpers';
 import { Color } from 'ink';
 
-// TODO: Implement as not a copy of BuildStage
-
 interface StateProps {
 
 }
 
 interface DispatchProps {
-  updateNewDeploy: (field: keyof DeployArgs, value: string) => void
+  updateNewDeploy: (field: DeployArgsKey, value: DeployArgsVal) => void
 }
 
 export interface EnvStageProps {
-  buildScript: string
-  repo: string
-  owner: string
-  branch: string
+
+}
+
+function parseEnvFile(relativePath: string) {
+  let path = resolve(process.cwd(), relativePath);
+  let parsedConfig = config({path: path});
+  return parsedConfig.parsed;
 }
 
 const EnvStage: FC<EnvStageProps & StateProps & DispatchProps> = (props) => {
-  const { updateNewDeploy, buildScript, repo, owner, branch } = props;
+  const { updateNewDeploy } = props;
+  const [envPath, setEnvPath] = useState('');
   const [needToSpecify, setNeedToSpecify] = useState(false);
+  const [usingEnvFile, setUsingEnvFile] = useState(false);
 
-  const buildScriptElts = [
-    <ChevronText key='build-script-location'>
-      Build Script found in <Text bold>@{owner}/{repo}</Text> on <Text bold>{branch}</Text>: 
-    </ChevronText>,
-    <ChevronText key='build-script-value'>
-      <Color green>{buildScript}</Color>
-    </ChevronText>
-  ]
+  if (envPath) {
+    let parsedEnv = parseEnvFile(envPath);
+    // TODO: confirm vars with user
+    updateNewDeploy('envVars', parsedEnv);
+  }
 
-  if (!needToSpecify && buildScript === 'react-scripts build') return (
+  if (!usingEnvFile) return (
     <Select label={[
-      ...buildScriptElts,
-      <ChevronText key='confirm-cra'>Does your project compile to "/build"?  It looks like you're using create-react-app.</ChevronText>
+      <ChevronText key='confirm-env'>Does your build require a .env file?</ChevronText>
     ]} items={[
-      { label: 'Yes, /build is my build directory', value: 'Yes' },
-      { label: 'No, pick a different one', value: 'No' }
+      { label: 'Yes, I would like to specify a .env file for the build', value: 'Yes' },
+      { label: 'No, build without a .env file', value: 'No' }
     ]} onSelect={({ value }) => {
       if (value === 'Yes') {
-        updateNewDeploy('buildDir', '/build')
+        setUsingEnvFile(true);
+      } else {
+        updateNewDeploy('envVars', {});
+      }
+    }} />
+  )
+
+  if (!needToSpecify) return (
+    <Select label={[
+      <ChevronText key='confirm-env'>Is your .env file located in the current directory and named '.env'?</ChevronText>
+    ]} items={[
+      { label: 'Yes, my .env file is located at ./.env', value: 'Yes' },
+      { label: 'No, I would like to specify a path to the .env file', value: 'No' }
+    ]} onSelect={({ value }) => {
+      if (value === 'Yes') {
+        setEnvPath(resolve(process.cwd(), '.env'))
       } else {
         setNeedToSpecify(true)
       }
@@ -56,13 +72,12 @@ const EnvStage: FC<EnvStageProps & StateProps & DispatchProps> = (props) => {
   )
 
   return (
-    <ArgPrompt name='Directory:'
+    <ArgPrompt name='Env File Path:'
       label={[
-        ...buildScriptElts,
-        <ChevronText key='custom-build-dir'>What directory will your build end up in?  This is relative to your repository root, no need for a dot.</ChevronText>
+        <ChevronText key='env-file-path'>Please specify a path to your .env file.  This is relative to your current directory, no need for a dot.</ChevronText>
       ]}
-      withResult={(newName) => {
-        updateNewDeploy('buildDir', newName);
+      withResult={(path) => {
+        setEnvPath(path);
       }} />
   )
 }
@@ -75,7 +90,7 @@ const mapStateToProps = (state: AppState) => {
 
 const mapDispatchToProps = (dispatch: AsyncDispatch) => {
   return {
-    updateNewDeploy: (field: keyof DeployArgs, value: string) => dispatch(FormActions.update({ field, value }))
+    updateNewDeploy: (field: DeployArgsKey, value: DeployArgsVal) => dispatch(FormActions.update({ field, value }))
   }
 }
 
