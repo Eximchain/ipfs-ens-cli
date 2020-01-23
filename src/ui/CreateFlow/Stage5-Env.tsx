@@ -72,7 +72,7 @@ const EnvStage: FC<EnvStageProps & StateProps & DispatchProps> = (props) => {
   )
 
   return (
-    <ArgPrompt name='Env File Path:'
+    <ArgPrompt name='Env File Path'
       label={[
         <ChevronText key='env-file-path'>Please specify a path to your .env file.  This is relative to your current directory, no need for a dot.</ChevronText>
       ]}
