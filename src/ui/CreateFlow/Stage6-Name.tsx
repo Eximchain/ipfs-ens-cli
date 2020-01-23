@@ -31,7 +31,7 @@ export const NameStage: FC<NameStageProps> = ({ API }) => {
     return <ErrorBox errMsg={`Failed to check if ${maybeName} is available: ${error.toString()}`} />
   }
 
-  const nameAvailable = data && data.data && !data.data.exists;
+  const nameAvailable = maybeName && data && data.data && !data.data.exists;
   if (nameAvailable) return (
     <ConfirmAction
       action={`${maybeName} is available!`}
@@ -50,7 +50,7 @@ export const NameStage: FC<NameStageProps> = ({ API }) => {
       label={[
         <ChevronText key='what-subdomain'>
           {
-            data && data.data && data.data.exists ?
+            maybeName && data && data.data && data.data.exists ?
               `Unfortunately, ${maybeName} is taken. Which ENS subdomain would you like instead?` :
               'What ENS subdomain would you like?'
           }
