@@ -54,7 +54,7 @@ const BuildStage: FC<BuildStageProps & StateProps & DispatchProps> = (props) => 
   )
 
   return (
-    <ArgPrompt name='Directory:'
+    <ArgPrompt name='Directory'
       label={[
         ...buildScriptElts,
         <ChevronText key='custom-build-dir'>What directory will your build end up in?  This is relative to your repository root, no need for a dot.</ChevronText>

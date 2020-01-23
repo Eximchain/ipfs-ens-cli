@@ -6,8 +6,9 @@ import RepoStage from './Stage1-Repo';
 import BranchStage from './Stage2-Branch';
 import PackageStage from './Stage3-Package';
 import BuildStage from './Stage4-Build';
-import NameStage from './Stage5-Name';
-import ConfirmStage from './Stage6-Confirm';
+import EnvStage from './Stage5-Env';
+import NameStage from './Stage6-Name';
+import ConfirmStage from './Stage7-Confirm';
 import { FormSelectors, FormActions } from '../../state/FormDuck';
 
 export interface CreateFlowProps {
@@ -17,7 +18,7 @@ export interface CreateFlowProps {
 export const CreateFlow:FC<CreateFlowProps> = (props) => {
   const { API } = props;
 
-  const { ensName, repo, owner, branch, packageDir, buildDir } = useSelector(FormSelectors.getArgs());
+  const { ensName, repo, owner, branch, packageDir, buildDir, envVars } = useSelector(FormSelectors.getArgs());
   const [buildScript, setBuildScript] = useState('');
 
   if (repo === '' || owner === '') {
@@ -34,6 +35,10 @@ export const CreateFlow:FC<CreateFlowProps> = (props) => {
 
   if (buildDir === '') {
     return <BuildStage {...{ buildScript, repo, owner, branch }} />;
+  }
+
+  if (envVars === undefined) {
+    return <EnvStage />;
   }
 
   if (ensName === '') {
