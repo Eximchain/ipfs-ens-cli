@@ -54,6 +54,7 @@ const ProgressItem: FC<{
       case 'past':
         if (verb.toLowerCase() === 'build') return 'Built';
         if (verb.toLowerCase() === 'set') return 'Set';
+        if (verb.toLowerCase() === 'send') return 'Sent';
         return verb + 'ed';
       case 'present':
         return verb + 'ing';

@@ -34,7 +34,7 @@ export const Overview: FC<DeployItem> = (props) => {
 
   if (transitionError) OverviewRows.push(
     <ChevronText key='error'>
-      {`Deployment failed during the ${state} stage`}
+      {`Deployment failed during the ${transitionError.transition} stage`}
     </ChevronText>
   )
   if (transitions.source) OverviewRows.push(
